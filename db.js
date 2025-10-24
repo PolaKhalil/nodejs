@@ -1,10 +1,8 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const uri = "mongodb+srv://khedma:j6j3mJyvOIajZOlB@khedma.j4ih4ss.mongodb.net/psq"; // غير اسم الداتا بيز لو تحب
-
-mongoose.connect(uri, {
+mongoose.connect('mongodb+srv://khedma:j6j3mJyvOIajZOlB@khedma.j4ih4ss.mongodb.net/psq?retryWrites=true&w=majority', {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
+  useUnifiedTopology: true
 })
-.then(() => console.log("MongoDB connected"))
-.catch((err) => console.error("MongoDB connection error:", err));
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.error('MongoDB connection error:', err));
