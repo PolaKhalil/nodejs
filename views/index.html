@@ -30,7 +30,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.55);
+        /* background: rgba(0, 0, 0, 0.55); */
         /* backdrop-filter: blur(4px); */
         z-index: 0;
       }
@@ -128,7 +128,9 @@
         <input type="text" placeholder="اسم المستخدم" required />
         <input type="password" placeholder="كلمة المرور" required />
         <button type="submit" class="btn btn-login">تسجيل الدخول</button>
-        <button type="button" class="btn btn-register">إنشاء حساب جديد</button>
+        <button type="button" class="btn btn-register" onclick="location.href='/new-account'">
+          إنشاء حساب جديد
+        </button>
       </form>
     </div>
 

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إنشاء حساب جديد - إعداد خدام</title>
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Almarai', sans-serif; }
+    body { background: url("/assets/login.png") no-repeat center center/cover; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+    .overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.55); z-index: 0; }
+    .form-container { position: absolute; bottom: 5%; z-index: 1; width: 90%; max-width: 400px; background: rgba(0,0,0,0.75); padding: 30px; border-radius: 20px; text-align: center; color: #fff; box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+    .form-container h1 { font-size: 26px; margin-bottom: 10px; color: #ffb84d; }
+    .form-container input, .form-container select { width: 100%; padding: 12px; margin-bottom: 15px; border: none; border-radius: 10px; background: rgba(255,255,255,0.9); font-size: 15px; text-align: right; }
+    .birthday-row { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 15px; }
+    .btn-submit { width: 100%; padding: 12px; font-size: 16px; border: none; border-radius: 10px; background: linear-gradient(45deg,#ff8c00,#ffb84d); color: #fff; cursor: pointer; }
+    .btn-submit:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="form-container">
+    <h1>إنشاء حساب جديد</h1>
+    <form id="newAccountForm">
+      <input type="text" id="fullname" placeholder="الاسم رباعي باللغة العربية" required>
+      <input type="text" id="phone" placeholder="رقم الموبايل" required>
+      <input type="email" id="email" placeholder="الإيميل" required>
+      <input type="text" id="address" placeholder="العنوان" required>
+      
+      <div class="birthday-row">
+        <select id="day" required><option value="">اليوم</option></select>
+        <select id="month" required><option value="">الشهر</option></select>
+        <select id="year" required><option value="">السنة</option></select>
+      </div>
+
+      <input type="text" id="father" placeholder="أب الإعتراف" required>
+      <select id="grade" required>
+        <option value="">السنة الدراسية</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="خادم">خادم</option>
+      </select>
+
+      <input type="text" id="username" placeholder="اسم المستخدم" required>
+      <input type="password" id="password" placeholder="كلمة المرور" required>
+      <input type="password" id="confirm-password" placeholder="تأكيد كلمة المرور" required>
+
+      <button type="submit" class="btn-submit">إنشاء حساب جديد</button>
+    </form>
+  </div>
+
+  <script>
+    // Populate days, months, years
+    const daySelect = document.getElementById('day');
+    const monthSelect = document.getElementById('month');
+    const yearSelect = document.getElementById('year');
+    for(let i=1;i<=31;i++) daySelect.innerHTML += `<option value="${i}">${i}</option>`;
+    for(let i=1;i<=12;i++) monthSelect.innerHTML += `<option value="${i}">${i}</option>`;
+    const yearNow = new Date().getFullYear();
+    for(let i=0;i<100;i++) yearSelect.innerHTML += `<option value="${yearNow-i}">${yearNow-i}</option>`;
+
+    // Form validation
+    document.getElementById("newAccountForm").addEventListener("submit", function(e){
+      const fullname = document.getElementById("fullname").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const father = document.getElementById("father").value.trim();
+      const grade = document.getElementById("grade").value;
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+      const confirm = document.getElementById("confirm-password").value;
+      const day = document.getElementById("day").value;
+      const month = document.getElementById("month").value;
+      const year = document.getElementById("year").value;
+
+      if(fullname.split(' ').length !== 4){ alert("يرجى كتابة الاسم رباعي بدون فواصل"); e.preventDefault(); return; }
+      if(!/^01[0125]/.test(phone) || phone.length < 10 || phone.length > 11){ alert("رقم الموبايل غير صحيح"); e.preventDefault(); return; }
+      if(!email.includes('@') || !email.includes('.com') || email.startsWith('@')){ alert("الإيميل غير صحيح"); e.preventDefault(); return; }
+      if(address === ""){ alert("يرجى إدخال العنوان"); e.preventDefault(); return; }
+      if(father === ""){ alert("يرجى إدخال أب الإعتراف"); e.preventDefault(); return; }
+      if(grade === ""){ alert("يرجى اختيار السنة الدراسية أو خادم"); e.preventDefault(); return; }
+      if(username === ""){ alert("يرجى إدخال اسم المستخدم"); e.preventDefault(); return; }
+      if(password === ""){ alert("يرجى إدخال كلمة المرور"); e.preventDefault(); return; }
+      if(password !== confirm){ alert("كلمة المرور والتأكيد غير متطابقين!"); e.preventDefault(); return; }
+      if(!day || !month || !year){ alert("يرجى إدخال تاريخ الميلاد بالكامل"); e.preventDefault(); return; }
+
+      // كل حاجة تمام → الفورم هيتسلم
+    });
+  </script>
+
+  <script>
+document.getElementById("newAccountForm").addEventListener("submit", async function(e){
+  e.preventDefault(); // منع الفورم من الإرسال التقليدي
+
+  // جمع البيانات
+  const data = {
+    fullname: document.getElementById("fullname").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    address: document.getElementById("address").value.trim(),
+    father: document.getElementById("father").value.trim(),
+    grade: document.getElementById("grade").value,
+    username: document.getElementById("username").value.trim(),
+    password: document.getElementById("password").value,
+    birth: `${document.getElementById("year").value}-${document.getElementById("month").value}-${document.getElementById("day").value}`
+  };
+
+  try{
+    const res = await fetch('/api/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+    if(res.status === 201){
+      alert(result.message);
+      window.location.href = "/"; // تحويل المستخدم للصفحة الرئيسية بعد التسجيل
+    } else {
+      alert(result.error);
+    }
+  } catch(err){
+    console.error(err);
+    alert("حدث خطأ أثناء إنشاء الحساب!");
+  }
+});
+</script>
+
+</body>
+</html>
