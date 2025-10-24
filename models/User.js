@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, enum: ["1","2","3","خادم"], required: true },
+  verified: { type: Number, required: true },
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);
