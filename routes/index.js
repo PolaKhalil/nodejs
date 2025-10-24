@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/index.html'));
 });
 
-router.get('/new_account', (req, res) => {
+router.get('/new-account', (req, res) => {
   res.sendFile(path.join(__dirname, '../views/new_account.html'));
 });
 
