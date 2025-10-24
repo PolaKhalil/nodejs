@@ -1,4 +1,3 @@
-// routes/users.js
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
@@ -6,36 +5,35 @@ const User = require("../models/User");
 router.post("/", async (req, res) => {
   try {
     const {
-      fullName,
+      fullname, // لاحظ small n
       phone,
       email,
       address,
       father,
-      academicYear,
+      grade,
       username,
       password,
-      birthday,
-      grade
+      birth
     } = req.body;
 
-    // تحقق من اسم المستخدم المكرر
+    // التحقق من اسم المستخدم المكرر
     const existing = await User.findOne({ username });
     if (existing)
       return res.status(400).json({ message: "اسم المستخدم موجود بالفعل" });
 
-    // إنشاء مستخدم جديد
+    // إنشاء المستخدم الجديد
     const newUser = new User({
-      fullName,
+      fullName: fullname,
       phone,
       email,
       address,
       father,
-      academicYear,
+      academicYear: grade,
       username,
       password,
-      birthday,
-      role: grade, // استخدم الـ grade كـ role
-      verified: 0
+      birthday: birth,
+      role: grade,
+      verified : 0
     });
 
     await newUser.save();
