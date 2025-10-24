@@ -89,5 +89,44 @@
       // كل حاجة تمام → الفورم هيتسلم
     });
   </script>
+
+  <script>
+document.getElementById("newAccountForm").addEventListener("submit", async function(e){
+  e.preventDefault(); // منع الفورم من الإرسال التقليدي
+
+  // جمع البيانات
+  const data = {
+    fullname: document.getElementById("fullname").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    address: document.getElementById("address").value.trim(),
+    father: document.getElementById("father").value.trim(),
+    grade: document.getElementById("grade").value,
+    username: document.getElementById("username").value.trim(),
+    password: document.getElementById("password").value,
+    birth: `${document.getElementById("year").value}-${document.getElementById("month").value}-${document.getElementById("day").value}`
+  };
+
+  try{
+    const res = await fetch('/api/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+    if(res.status === 201){
+      alert(result.message);
+      window.location.href = "/"; // تحويل المستخدم للصفحة الرئيسية بعد التسجيل
+    } else {
+      alert(result.error);
+    }
+  } catch(err){
+    console.error(err);
+    alert("حدث خطأ أثناء إنشاء الحساب!");
+  }
+});
+</script>
+
 </body>
 </html>
