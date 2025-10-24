@@ -1,15 +1,24 @@
 const express = require('express');
 const path = require('path');
-const indexRouter = require('./routes/index');
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Serve static files from "public"
+require('./db'); // الاتصال بالـ MongoDB
+
+// Middleware لقراءة JSON من الـ body
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Router
+// HTML Routes
+const indexRouter = require('./routes/index');
 app.use('/', indexRouter);
+
+// API Routes
+const usersRouter = require('./routes/users'); // راوت المستخدمين
+app.use('/api/users', usersRouter);
 
 // 404 handler
 app.use((req, res, next) => {
