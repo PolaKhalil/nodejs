@@ -12,8 +12,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 
 // New Account Page
-router.get('/new-account', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/new_account.html'));
+app.get('/new-account', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'new_account.html'));
 });
 
 // 404 handler
