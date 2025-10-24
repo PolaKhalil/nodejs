@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const uri = "mongodb://mongo:guMZHlZPuxXpzqVLZqILCHndPvBsjOtv@mongodb.railway.internal:27017/mydb"; // غير اسم الداتا بيز لو تحب
+const uri = "mongodb://mongo:guMZHlZPuxXpzqVLZqILCHndPvBsjOtv@mongodb.railway.internal:27017/psq"; // غير اسم الداتا بيز لو تحب
 
 mongoose.connect(uri, {
   useNewUrlParser: true,
