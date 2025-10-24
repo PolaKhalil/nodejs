@@ -61,7 +61,9 @@
     for(let i=0;i<100;i++) yearSelect.innerHTML += `<option value="${yearNow-i}">${yearNow-i}</option>`;
 
     // Form validation
-    document.getElementById("newAccountForm").addEventListener("submit", function(e){
+    document.getElementById("newAccountForm").addEventListener("submit", async function(e){
+      e.preventDefault(); // منع الفورم من الإرسال التقليدي
+
       const fullname = document.getElementById("fullname").value.trim();
       const phone = document.getElementById("phone").value.trim();
       const email = document.getElementById("email").value.trim();
@@ -75,58 +77,51 @@
       const month = document.getElementById("month").value;
       const year = document.getElementById("year").value;
 
-      if(fullname.split(' ').length !== 4){ alert("يرجى كتابة الاسم رباعي بدون فواصل"); e.preventDefault(); return; }
-      if(!/^01[0125]/.test(phone) || phone.length < 10 || phone.length > 11){ alert("رقم الموبايل غير صحيح"); e.preventDefault(); return; }
-      if(!email.includes('@') || !email.includes('.com') || email.startsWith('@')){ alert("الإيميل غير صحيح"); e.preventDefault(); return; }
-      if(address === ""){ alert("يرجى إدخال العنوان"); e.preventDefault(); return; }
-      if(father === ""){ alert("يرجى إدخال أب الإعتراف"); e.preventDefault(); return; }
-      if(grade === ""){ alert("يرجى اختيار السنة الدراسية أو خادم"); e.preventDefault(); return; }
-      if(username === ""){ alert("يرجى إدخال اسم المستخدم"); e.preventDefault(); return; }
-      if(password === ""){ alert("يرجى إدخال كلمة المرور"); e.preventDefault(); return; }
-      if(password !== confirm){ alert("كلمة المرور والتأكيد غير متطابقين!"); e.preventDefault(); return; }
-      if(!day || !month || !year){ alert("يرجى إدخال تاريخ الميلاد بالكامل"); e.preventDefault(); return; }
+      // Validation
+      if(fullname.split(' ').length !== 4){ alert("يرجى كتابة الاسم رباعي بدون فواصل"); return; }
+      if(!/^01[0125]/.test(phone) || phone.length < 10 || phone.length > 11){ alert("رقم الموبايل غير صحيح"); return; }
+      if(!email.includes('@') || !email.includes('.com') || email.startsWith('@')){ alert("الإيميل غير صحيح"); return; }
+      if(address === ""){ alert("يرجى إدخال العنوان"); return; }
+      if(father === ""){ alert("يرجى إدخال أب الإعتراف"); return; }
+      if(grade === ""){ alert("يرجى اختيار السنة الدراسية أو خادم"); return; }
+      if(username === ""){ alert("يرجى إدخال اسم المستخدم"); return; }
+      if(password === ""){ alert("يرجى إدخال كلمة المرور"); return; }
+      if(password !== confirm){ alert("كلمة المرور والتأكيد غير متطابقين!"); return; }
+      if(!day || !month || !year){ alert("يرجى إدخال تاريخ الميلاد بالكامل"); return; }
 
-      // كل حاجة تمام → الفورم هيتسلم
+      // Prepare data
+      const birth = `${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`;
+      const data = {
+        fullName: fullname,
+        phone,
+        email,
+        address,
+        father,
+        academicYear: grade,
+        username,
+        password,
+        birthday: birth,
+        role: grade
+      };
+
+      try{
+        const res = await fetch('/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        if(res.status === 201){
+          alert(result.message);
+          window.location.href = "/"; // تحويل المستخدم للصفحة الرئيسية بعد التسجيل
+        } else {
+          alert(result.message || "حدث خطأ أثناء التسجيل");
+        }
+      }catch(err){
+        console.error(err);
+        alert("حدث خطأ أثناء إنشاء الحساب!");
+      }
     });
   </script>
-
-  <script>
-document.getElementById("newAccountForm").addEventListener("submit", async function(e){
-  e.preventDefault(); // منع الفورم من الإرسال التقليدي
-
-  // جمع البيانات
-  const data = {
-    fullname: document.getElementById("fullname").value.trim(),
-    phone: document.getElementById("phone").value.trim(),
-    email: document.getElementById("email").value.trim(),
-    address: document.getElementById("address").value.trim(),
-    father: document.getElementById("father").value.trim(),
-    grade: document.getElementById("grade").value,
-    username: document.getElementById("username").value.trim(),
-    password: document.getElementById("password").value,
-    birth: `${document.getElementById("year").value}-${document.getElementById("month").value}-${document.getElementById("day").value}`
-  };
-
-  try{
-    const res = await fetch('/api/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-
-    const result = await res.json();
-    if(res.status === 201){
-      alert(result.message);
-      window.location.href = "/"; // تحويل المستخدم للصفحة الرئيسية بعد التسجيل
-    } else {
-      alert(result.error);
-    }
-  } catch(err){
-    console.error(err);
-    alert("حدث خطأ أثناء إنشاء الحساب!");
-  }
-});
-</script>
-
 </body>
 </html>
