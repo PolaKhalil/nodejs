@@ -4,21 +4,22 @@ const User = require("../models/User");
 
 router.post("/", async (req, res) => {
   try {
-    console.log("BODY RECEIVED:", req.body); // 👈 عشان نتابع البيانات
+    console.log("BODY RECEIVED:", req.body);
 
     const {
-      fullname,
+      fullName,
       phone,
       email,
       address,
       father,
-      grade,
+      academicYear,
       username,
       password,
-      birth
+      birthday,
+      role
     } = req.body;
 
-    if (!fullname || !phone || !email || !address || !father || !grade || !username || !password || !birth) {
+    if (!fullName || !phone || !email || !address || !father || !academicYear || !username || !password || !birthday || !role) {
       return res.status(400).json({ message: "من فضلك املأ كل البيانات" });
     }
 
@@ -29,17 +30,17 @@ router.post("/", async (req, res) => {
 
     // إنشاء المستخدم
     const newUser = new User({
-      fullName: fullname,
+      fullName,
       phone,
       email,
       address,
       father,
-      academicYear: grade,
+      academicYear,
       username,
       password,
-      birthday: new Date(birth),
-      role: grade,
-      verified : 0
+      birthday: new Date(birthday),
+      role,
+      verified: 0
     });
 
     await newUser.save();
