@@ -8,6 +8,8 @@ const PORT = 3000;
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Serve static files from the "assets" directory
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 // Use the router for handling routes
 app.use('/', indexRouter);
 
