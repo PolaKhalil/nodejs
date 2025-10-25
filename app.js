@@ -24,6 +24,10 @@ app.use('/api/users', usersRouter);
 const loginRouter = require('./routes/login');
 app.use('/api/login', loginRouter);
 
+app.get("/profile.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "profile.html"));
+});
+
 // 404 handler
 app.use((req, res, next) => {
   res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
