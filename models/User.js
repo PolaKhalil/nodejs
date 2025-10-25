@@ -10,9 +10,9 @@ const userSchema = new mongoose.Schema({
   academicYear: { type: String, required: true },
   username: { type: String, required: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ["1","2","3","خادم"], required: true },
+  level: { type: String, enum: ["1","2","3","خادم"], required: true },
   verified: { type: Number, required: true },
-  accepted_by: { type: String, required: true },
+  accepted_by: { type: String, required: false },
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);

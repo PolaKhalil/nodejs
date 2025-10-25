@@ -16,7 +16,7 @@ router.post("/", async (req, res) => {
       username,
       password,
       birthday,
-      role
+      level
     } = req.body;
 
     // ✅ التحقق من إدخال كل البيانات المطلوبة
@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
       !username ||
       !password ||
       !birthday ||
-      !role
+      !level
     ) {
       return res.status(400).json({ message: "من فضلك املأ كل البيانات" });
     }
@@ -59,7 +59,7 @@ router.post("/", async (req, res) => {
       username,
       password,
       birthday: new Date(birthday),
-      role,
+      level,
       verified: 0,
       accepted_by: ""
     });
