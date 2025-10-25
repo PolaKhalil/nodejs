@@ -19,16 +19,36 @@ router.post("/", async (req, res) => {
       role
     } = req.body;
 
-    if (!fullName || !phone || !email || !address || !father || !academicYear || !username || !password || !birthday || !role) {
+    // ✅ التحقق من إدخال كل البيانات المطلوبة
+    if (
+      !fullName ||
+      !phone ||
+      !email ||
+      !address ||
+      !father ||
+      !academicYear ||
+      !username ||
+      !password ||
+      !birthday ||
+      !role
+    ) {
       return res.status(400).json({ message: "من فضلك املأ كل البيانات" });
     }
 
-    // التحقق من المستخدم المكرر
-    const existing = await User.findOne({ username });
-    if (existing)
+    // ✅ التحقق من القيم المكررة
+    const existingPhone = await User.findOne({ phone });
+    if (existingPhone)
+      return res.status(400).json({ message: "رقم الموبايل مسجل بالفعل" });
+
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail)
+      return res.status(400).json({ message: "البريد الإلكتروني مسجل بالفعل" });
+
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername)
       return res.status(400).json({ message: "اسم المستخدم موجود بالفعل" });
 
-    // إنشاء المستخدم
+    // ✅ إنشاء المستخدم الجديد
     const newUser = new User({
       fullName,
       phone,
@@ -40,7 +60,8 @@ router.post("/", async (req, res) => {
       password,
       birthday: new Date(birthday),
       role,
-      verified: 0
+      verified: 0,
+      accepted_by: ""
     });
 
     await newUser.save();
