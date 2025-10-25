@@ -35,6 +35,8 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ message: "من فضلك املأ كل البيانات" });
     }
 
+    
+
     // ✅ التحقق من القيم المكررة
     const existingPhone = await User.findOne({ phone });
     if (existingPhone)
